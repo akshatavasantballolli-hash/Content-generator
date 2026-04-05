@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>AI Content Generator</title>
+  <style>
+    body {
+      font-family: Arial;
+      text-align: center;
+      background: #f4f4f4;
+      margin-top: 50px;
+    }
+
+    input, select {
+      padding: 10px;
+      width: 250px;
+      margin: 10px;
+    }
+
+    button {
+      padding: 10px 20px;
+      cursor: pointer;
+      background: black;
+      color: white;
+      border: none;
+    }
+
+    #output {
+      white-space: pre-wrap;
+      margin-top: 20px;
+      background: white;
+      padding: 15px;
+      width: 400px;
+      margin-left: auto;
+      margin-right: auto;
+      border-radius: 10px;
+      border: 1px solid #ccc;
+    }
+  </style>
+</head>
+
+<body>
+
+<h2>🚀 AI Content Generator</h2>
+
+<input type="text" id="topic" placeholder="Enter topic">
+<br>
+
+<select id="type">
+  <option value="instagram">Instagram Post</option>
+  <option value="blog">Blog</option>
+  <option value="caption">Caption</option>
+</select>
+
+<br>
+
+<button onclick="generate()">Generate</button>
+
+<button onclick="copyText()">Copy</button>
+
+<div id="output">Your content will appear here...</div>
+
+<script>
+async function generate() {
+  const topic = document.getElementById("topic").value;
+  const type = document.getElementById("type").value;
+
+  document.getElementById("output").innerText = "⏳ Generating...";
+
+  const res = await fetch("http://localhost:3000/generate", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json"
+    },
+    body: JSON.stringify({ topic, type })
+  });
+
+  const data = await res.json();
+
+  document.getElementById("output").innerText = data.result;
+}
+
+function copyText() {
+  const text = document.getElementById("output").innerText;
+  navigator.clipboard.writeText(text);
+  alert("Copied!");
+}
+</script>
+
+</body>
+</html>
